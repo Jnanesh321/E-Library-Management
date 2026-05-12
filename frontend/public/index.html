@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>E-Library Management System</title>
+    <style>
+      /* Prevent horizontal overflow globally */
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow-x: hidden; 
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Responsive Fade-in: Less horizontal movement for mobile */
+      .fade-in {
+        animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); } /* Use Y instead of X for mobile safety */
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* 3D Floating: Reduced intensity for smaller screens */
+      .floating-element {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(1deg); }
+        100% { transform: translateY(0px) rotate(0deg); }
+      }
+
+      .hover-button {
+        transition: all 0.3s ease !important;
+        touch-action: manipulation; /* Optimizes for mobile taps */
+      }
+
+      .hover-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
