@@ -4,7 +4,7 @@ import LandingPage from './pages/LandingPage.jsx';
 import PortalSelection from './pages/PortalSelection.jsx';
 import UserLogin from './pages/UserLogin.jsx'; // Add this
 import AdminLogin from './pages/AdminLogin.jsx'; // Add this (after you create the file)
-
+import Dashboard from './pages/Dashboard.jsx';
 function App() {
   return (
     <Router>
@@ -20,7 +20,7 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
 
         {/* Future Dashboard Route Placeholder */}
-        <Route path="/dashboard" element={<div>Dashboard Content Coming Soon...</div>} />
+       <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
