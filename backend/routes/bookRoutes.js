@@ -14,15 +14,15 @@ const storage = multer.diskStorage({
     cb(null, uploadDirectory);
   },
   filename: (_req, file, cb) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${uniqueSuffix}${path.extname(file.originalname).toLowerCase() || ".pdf"}`);
+    const filenameBase = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${filenameBase}${path.extname(file.originalname).toLowerCase() || ".pdf"}`);
   },
 });
 
 const upload = multer({
   storage,
   fileFilter: (_req, file, cb) => {
-    const isPdf = file.mimetype === "application/pdf" || file.originalname.toLowerCase().endsWith(".pdf");
+    const isPdf = file.mimetype === "application/pdf";
     if (!isPdf) {
       return cb(new Error("Only PDF files are allowed"));
     }
