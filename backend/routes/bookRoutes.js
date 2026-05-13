@@ -2,19 +2,20 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const multer = require("multer");
 
 const Book = require("../models/Book");
 
 const uploadDirectory = path.join(__dirname, "..", "uploads");
+fs.mkdirSync(uploadDirectory, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    fs.mkdirSync(uploadDirectory, { recursive: true });
     cb(null, uploadDirectory);
   },
   filename: (_req, file, cb) => {
-    const filenameBase = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const filenameBase = `${Date.now()}-${crypto.randomUUID()}`;
     cb(null, `${filenameBase}${path.extname(file.originalname).toLowerCase() || ".pdf"}`);
   },
 });
@@ -45,6 +46,12 @@ router.post("/add", (req, res) => {
 
       if (!req.file) {
         return res.status(400).json({ message: "PDF file is required" });
+      }
+
+      const fileHeader = fs.readFileSync(req.file.path).subarray(0, 5).toString();
+      if (fileHeader !== "%PDF-") {
+        fs.unlink(req.file.path, () => {});
+        return res.status(400).json({ message: "Uploaded file content is not a valid PDF" });
       }
 
       const book = new Book({
