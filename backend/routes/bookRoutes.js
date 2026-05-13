@@ -48,9 +48,15 @@ router.post("/add", (req, res) => {
         return res.status(400).json({ message: "PDF file is required" });
       }
 
-      const fileHeader = fs.readFileSync(req.file.path).subarray(0, 5).toString();
+      const resolvedUploadPath = path.resolve(req.file.path);
+      const resolvedUploadDirectory = `${path.resolve(uploadDirectory)}${path.sep}`;
+      if (!resolvedUploadPath.startsWith(resolvedUploadDirectory)) {
+        return res.status(400).json({ message: "Invalid upload path" });
+      }
+
+      const fileHeader = (await fs.promises.readFile(resolvedUploadPath)).subarray(0, 5).toString();
       if (fileHeader !== "%PDF-") {
-        fs.unlink(req.file.path, () => {});
+        await fs.promises.unlink(resolvedUploadPath).catch(() => {});
         return res.status(400).json({ message: "Uploaded file content is not a valid PDF" });
       }
 
