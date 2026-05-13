@@ -54,7 +54,14 @@ router.post("/add", (req, res) => {
         return res.status(400).json({ message: "Invalid upload path" });
       }
 
-      const fileHeader = (await fs.promises.readFile(resolvedUploadPath)).subarray(0, 5).toString();
+      const headerBuffer = Buffer.alloc(5);
+      const uploadedFileHandle = await fs.promises.open(resolvedUploadPath, "r");
+      try {
+        await uploadedFileHandle.read(headerBuffer, 0, 5, 0);
+      } finally {
+        await uploadedFileHandle.close();
+      }
+      const fileHeader = headerBuffer.toString();
       if (fileHeader !== "%PDF-") {
         await fs.promises.unlink(resolvedUploadPath).catch(() => {});
         return res.status(400).json({ message: "Uploaded file content is not a valid PDF" });
